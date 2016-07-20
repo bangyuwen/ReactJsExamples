@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>React Tutorial</title>
+    <!-- Not present in the tutorial. Just for basic styling. -->
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/babel">
+
+    var SearchExample = React.createClass({
+
+      getInitialState: function() {
+        return ({searchString: ''})
+      },
+
+      handleChange: function(inP) {
+        this.setState({searchString: inP.target.value})
+      },
+
+      render: function() {
+        var libraries = this.props.items,
+            searchString = this.state.searchString.trim().toLowerCase();
+
+        if(searchString.length > 0) {
+          libraries = libraries.filter(function(item) {
+            return item.name.toLowerCase().match(searchString);
+          })
+        }
+
+        return(
+          <div>
+            <input type="text" onChange={this.handleChange} placeholder="Type Here"/>
+            <ul>
+              {libraries.map(function(list){
+                return <li>{list.name}<a href={list.url}>{list.url}</a></li>
+                })}
+            </ul>
+          </div>
+        )
+      }
+    });
+
+    var libraries = [
+
+        { name: 'Backbone.js', url: 'http://documentcloud.github.io/backbone/'},
+        { name: 'AngularJS', url: 'https://angularjs.org/'},
+        { name: 'jQuery', url: 'http://jquery.com/'},
+        { name: 'Prototype', url: 'http://www.prototypejs.org/'},
+        { name: 'React', url: 'http://facebook.github.io/react/'},
+        { name: 'Ember', url: 'http://emberjs.com/'},
+        { name: 'Knockout.js', url: 'http://knockoutjs.com/'},
+        { name: 'Dojo', url: 'http://dojotoolkit.org/'},
+        { name: 'Mootools', url: 'http://mootools.net/'},
+        { name: 'Underscore', url: 'http://documentcloud.github.io/underscore/'},
+        { name: 'Lodash', url: 'http://lodash.com/'},
+        { name: 'Moment', url: 'http://momentjs.com/'},
+        { name: 'Express', url: 'http://expressjs.com/'},
+        { name: 'Koa', url: 'http://koajs.com/'},
+
+    ];
+
+    ReactDOM.render(
+      <SearchExample items={libraries}/>,
+      document.getElementById('container')
+    );
+    </script>
+  </body>
+</html>

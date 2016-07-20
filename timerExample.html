@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>React Tutorial</title>
+    <!-- Not present in the tutorial. Just for basic styling. -->
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/babel">
+
+    var TimerExample = React.createClass({
+
+      getInitialState: function() {
+        return { elapsed: 0 };
+      },
+      componentDidMount: function() {
+        this.timer = setInterval(this.tick, 50);
+      },
+      componentWillUnmount: function() {
+        clearIntervar(this.timer);
+      },
+      tick: function() {
+        this.setState({elapsed: new Date() - this.props.start})
+      },
+      render: function() {
+        var elasped = Math.round(this.state.elapsed / 100);
+        var seconds = (elasped / 10).toFixed(1);
+
+        return <p>This example was started <b>{seconds} seconds</b> ago.</p>;
+      }
+    });
+
+    ReactDOM.render(
+      <TimerExample start={Date.now()}/>,
+      document.getElementById('container')
+    );
+
+    </script>
+  </body>
+</html>

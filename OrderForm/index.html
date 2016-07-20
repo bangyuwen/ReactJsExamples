@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>React Tutorial</title>
+    <!-- Not present in the tutorial. Just for basic styling. -->
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/babel">
+
+    var ServiceChooser = React.createClass({
+
+      getInitialState: function() {
+        return(
+          {total: 0}
+        )
+      },
+      addTotal: function(price) {
+        this.setState({total: this.state.total + price})
+      },
+      render: function(){
+        var self = this;
+        var service = this.props.items.map(function(inp){
+          return <Service name={inp.name} price={inp.price} addTotal={self.addTotal} />
+        });
+
+        return(
+          <div>
+            <h1>Our Services</h1>
+            <div id="services">
+              {service}
+              <p id="total">Total<b>{this.state.total.toFixed(2)}</b></p>
+            </div>
+          </div>
+        )
+      }
+    });
+
+
+    var Service = React.createClass({
+
+      getInitialState: function() {
+        return(
+          {active: false}
+        )
+      },
+      clickHandler: function() {
+        var active = !this.state.active;
+        this.setState({active: active});
+        this.props.addTotal(active? this.props.price: -this.props.price);
+      },
+      render: function() {
+        return(
+            <p className={this.state.active? 'active':''} onClick={this.clickHandler}>
+              {this.props.name}
+              <b>{this.props.price.toFixed(2)}</b>
+            </p>
+        )
+      }
+    });
+
+    var services = [
+      { name: 'Web Development', price: 300 },
+      { name: 'Design', price: 400 },
+      { name: 'Integration', price: 250 },
+      { name: 'Training', price: 220 }
+    ];
+
+
+    ReactDOM.render(
+      <ServiceChooser items={services}/>,
+      document.getElementById('container')
+    )
+    </script>
+  </body>
+</html>
