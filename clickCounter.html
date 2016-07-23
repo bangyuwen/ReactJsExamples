@@ -1,0 +1,36 @@
+<!Doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- react's CDN -->
+    <script src="https://fb.me/react-15.2.1.min.js"></script>
+    <script src="https://fb.me/react-dom-15.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script type="text/babel">
+      var Counter = React.createClass({
+        getInitialState: function() {
+          return { count: 0 };
+        },
+        clickHandler: function() {
+          this.setState ({ count: this.state.count + 1 })
+        },
+        render: function() {
+          return (
+            <button onClick={this.clickHandler}>
+              {this.state.count} times were click!
+            </button>
+        )}
+      });
+
+      ReactDOM.render(
+        <Counter />,
+        document.getElementById('container')
+      );
+    </script>
+
+  </body>
+</html>
