@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://fb.me/react-15.2.1.min.js"></script>
+  <script src="https://fb.me/react-dom-15.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+  <meta charset="utf-8">
+  <title>Stop Watch</title>
+<style>
+  body {
+    font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    background: #efeff5;
+  }
+
+  .stopwatch {
+    text-align: center;
+  }
+
+  .stopwatch-timer {
+    font-size: 76px;
+    font-weight: 100;
+    line-height: 160px;
+
+    margin: 0;
+
+    border: solid #cecfd0;
+    border-width: 1px 0;
+    background-color: white;
+  }
+
+  .stopwatch-laps {
+    padding: 0 0 0 20px;
+    list-style-type: none;
+  }
+
+  .stopwatch-lap {
+    font-size: 20px;
+    line-height: 60px;
+    padding-right: 20px;
+    text-align: right;
+    border-bottom: 1px solid #d9dad0;
+  }
+
+  .stopwatch-lap strong {
+    float: left;
+    color: #7f8083;
+    font-weight: 100;
+  }
+
+  .stopwatch-lap strong::before {
+    content: 'Lap'
+  }
+
+  .btn {
+    font-family: inherit;
+    font-size: 20px;
+
+    display: inline-block;
+
+    width: 72px;
+    height: 72px;
+    margin: 24px;
+    padding: 0;
+
+    cursor: pointer;
+    letter-spacing: 1px;
+
+    border-radius: 50%;
+    outline: none;
+    background: white;
+  }
+
+  .start-btn {
+    color: #4bd76;
+  }
+
+  .stop-btn {
+    color: #fd3d2a;
+  }
+</style>
+</head>
+<body>
+  <div id="container"></div>
+  <script type="text/babel">
+    function formattedSeconds(sec) {
+      var seconds = ('0' + sec % 60).slice(-2);
+      var mintues = Math.floor(sec / 60);
+      return mintues + ":" + seconds;
+    }
+
+    var StopWatch = React.createClass({
+
+    getInitialState: function() {
+      return { secondsElasped: 0, laps: []};
+    },
+
+    handleStartClick: function() {
+      var self = this;
+      this.incrementer = setInterval(function() {
+        self.setState({ secondsElasped: (self.state.secondsElasped + 1) });
+      }, 1000)
+    },
+
+    handleStopClick: function() {
+      clearInterval(this.incrementer);
+      this.setState({ lastIncrementer: this.incrementer});
+    },
+
+    handleLaps: function() {
+      this.setState({ laps: this.state.laps.concat([formattedSeconds(this.state.secondsElasped)])});
+    },
+
+    handleResetClick: function() {
+      this.setState({ secondsElasped: 0, laps: []});
+    },
+
+    render: function() {
+      return(
+      <div className="stopwatch">
+        <h1 className="stopwatch-timer">{formattedSeconds(this.state.secondsElasped)}</h1>
+
+        { (this.state.secondsElasped === 0 || this.incrementer === this.state.lastIncrementer)
+          ? <Button className="start-btn" onClick={this.handleStartClick}>start</Button>
+          : <Button className="stop-btn" onClick={this.handleStopClick}>stop</Button>
+        }
+
+        { (this.state.secondsElasped !== 0 && this.incrementer !== this.state.lastIncrementer)
+          ? <Button onClick={this.handleLaps}>lap</Button>
+          : null
+        }
+
+        { (this.state.secondsElasped !== 0)
+          ? <Button onClick={this.handleResetClick}>reset</Button>
+          : null
+        }
+
+        <ul className="stopwatch-laps">
+          {this.state.laps.map(function(lap, i) {
+            return <li className="stopwatch-lap"><strong>{i + 1}</strong>/{lap}</li>
+          })}
+        </ul>
+      </div>)
+    }
+    });
+
+    var Button = React.createClass({
+      render: function(){
+        return <button type="button" {...this.props} className={"btn " + this.props.className} />;
+    }
+    })
+
+    ReactDOM.render(<StopWatch />, document.getElementById('container'));
+  </script>
+</body>
+</html>
